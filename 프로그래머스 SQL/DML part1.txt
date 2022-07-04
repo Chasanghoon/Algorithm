@@ -1,0 +1,92 @@
+DML((Select)
+* : From 절에 나열된 테이블에서 모든 열을 선택
+ALL: 선택된 모든 행을 반환. ALL이 default(생략가능)
+DISTINCT: 선택된 모든 행 중에서 중복 행 제거
+expression: 표현식은 값으로 인식되는 하나 이상의 값, 연산자 및 SQL 함수의 조합을 뜻함
+alias: 별칭
+
+[기본 Select]
+모든 사원의 모든 정보 검색
+select *
+from employees;
+
+사원이 근무하는 부서의 부서번호 검색
+select all department_id
+from employees;
+
+select distinct employee_id
+from employees;
+
+모든 사원의 사번, 이름, 급여 검색
+select employee_id, first_name, salary
+from employees;
+
+[Alias, 사칙연산 (+,-,*,/), NULL Value]
+모든 사원의 사번, 이름, 급여, 급여 * 12 (연봉) 검색
+select employee_id as 사번, first_name "이름",
+        salary as "급여", salary * 12 "연봉"
+from employees;
+
+모든 사원의 사번, 이름, 급여, 급여*12(연봉), 커미션, 커미션포함 연봉 검색
+select emloyee_id 사번, first_name "이름", salary "급여",
+        salary * 12 "연봉", commission_pct,
+        (salary + salary * commission_pct) * 12 "커미션포함연봉1",
+        (salary + salary * IFNULL(commission_pct, 0)) * 12 "커미션포함연봉2"
+from employees;
+
+모든 사원의 사번, 이름, 급영 따른 등급표시 검색
+15000 이상 "고액연봉" 8000이상 "평균연봉" 8000미만 "저액연봉"
+select employee_id, first_name, salary,
+        case when salary > 15000 then '고액연봉'
+              when salary > 8000 then '평균연봉'
+              else '저액연봉'
+        end "연봉등급"
+from employees;
+
+부서번호가 50인 사원중 급여가 7000 이상인 사원의 사번, 이름, 급여, 부서번호 검색
+select employee_id, first_name, salary, department_id
+from employees
+where department_id = 50
+and salary >= 7000;
+
+근무 부서번호가 50, 60, 70에 근무하는 사원의 사번, 이름, 부서번호 검색
+select employee_id, first_name, salary, department_id
+from employees
+where department_id = 50
+or department_id = 60
+or department_id = 70;
+
+근무 부서번호가 50, 60, 70이 아닌 사원의 사번, 이름, 부서번호 검색
+select employee_id, first_name, salary, department_id
+from employees
+where department_id != 50
+and department_id != 60
+and department_id != 70;
+
+select employee_id, first_name, salary, department_id
+from employees
+where not(department_id = 50
+or department_id = 60
+or department_id = 70);
+
+근무 부서번호가 50, 60, 70에 근무하는 사원의 사번, 이름, 부서번호 검색
+select employee_id, first_name, department_id
+from employees
+where department_id in (50,60,70);
+
+근무 부서번호가 50,60,70이 아닌 사원의 사번, 이름, 부서번호 검색
+select employee_id, first_name, department_id
+from employees
+where department_id not in (50,60,70);
+
+급여가 6000 이상 10000이하인 사원의 사번, 이름, 급여 검색
+select employee_id, first_name, salary
+from employees
+where salary >= 6000
+and salary <=10000;
+
+select employee_id, first_name, salary
+from employees
+where salary >=6000 between salary <= 10000;
+
+근무부서가 지정되지 않은(알수없는) 사원의 사번, 이름, 부서번호 검색
