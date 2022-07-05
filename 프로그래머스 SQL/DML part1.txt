@@ -90,3 +90,32 @@ from employees
 where salary >=6000 between salary <= 10000;
 
 근무부서가 지정되지 않은(알수없는) 사원의 사번, 이름, 부서번호 검색
+select employee_id, first_name, salary
+from employees
+where department_id is null;
+
+커미션을 받는 사원의 사번, 이름, 급여, 커미션 검색
+select employee_id, first_name, salary, commission_pct
+from employees
+where commission_pct is not null;
+
+이름에 'x'가 들어간 사원의 사번, 이름 검색
+select employee_id, first_name
+from employees
+where first_name like '%x%';
+
+이름의 끝에서 3번째 자리에 'x'가 들어간 사원의 사번, 이름 검색
+select employee_id, first_name
+from employees
+where first_name like '%x__';
+
+[정렬]
+select employee_id, first_name, salary
+from employees
+order by salary desc;
+
+50, 60, 70에 근무하는 사원의 사번, 이름, 부서번호, 급여 검색
+단, 부서별 정렬(오름차순) 후 급여 순(내림차순) 검색
+select employee_id, first_name, department_id, salary
+from employees
+order by department_id, salary desc;
