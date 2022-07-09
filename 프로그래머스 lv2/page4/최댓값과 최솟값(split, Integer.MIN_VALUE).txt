@@ -1,0 +1,24 @@
+import java.util.*;
+class Solution {
+    public String solution(String s) {
+        String answer = "";
+        String tmp[] = s.split(" ");
+        int temp[] = new int[tmp.length];
+        
+        for(int i = 0; i< temp.length; i++){
+            temp[i] = Integer.parseInt(tmp[i]);
+        }
+        Arrays.sort(temp);
+        
+        int maxvalue = Integer.MIN_VALUE;
+        int minvalue = Integer.MAX_VALUE;
+        for(int i=0; i<temp.length; i++){
+            if(maxvalue<temp[i]) maxvalue = temp[i];
+            if(minvalue>temp[i]) minvalue = temp[i];
+        }
+        
+        answer = minvalue + " " +  maxvalue;
+        //System.out.println(Arrays.toString(tmp));
+        return answer;
+    }
+}

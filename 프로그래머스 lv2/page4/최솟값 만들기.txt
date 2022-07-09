@@ -1,0 +1,36 @@
+import java.util.*;
+
+class Solution
+{
+    public int solution(int []A, int []B)
+    {
+        int answer = 0;
+        List<Integer> list = new ArrayList<>();
+        // for(int i =0; i<B.length; i++){
+        //     list.add(B[i]);
+        // }
+        
+        Arrays.sort(A);
+        Arrays.sort(B);
+        int[] b = new int[B.length];
+        int cnt = 0;
+        for(int i = B.length-1; i>= 0; i--){
+            b[cnt++] = B[i];
+        }
+        System.out.println(Arrays.toString(A));
+        System.out.println(Arrays.toString(B));
+        System.out.println(Arrays.toString(b));
+        //Collections.sort(list);        
+        //Collections.reverse(list);
+        
+        // for(int i = 0; i < list.size(); i++){
+        //     answer += A[i] * list.get(i);
+        //     System.out.println(answer);
+        // }
+        
+        for(int i = 0; i<b.length; i++){
+            answer += A[i] * b[i];    
+        }
+        return answer;
+    }
+}
