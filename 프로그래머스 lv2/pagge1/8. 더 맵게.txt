@@ -1,0 +1,24 @@
+import java.util.*;
+
+class Solution {
+    public int solution(int[] scoville, int K) {
+        int answer = 0;
+        PriorityQueue<Integer> qp = new PriorityQueue<>();
+        for(int cnt : scoville){
+            qp.offer(cnt);
+        }
+        //System.out.println(qp);
+        while(qp.peek()<=K){
+            if(qp.size() == 1) return -1;
+            
+            int tmp1 = qp.poll();
+            int tmp2 = qp.poll();
+            
+            int sum = tmp1 + tmp2*2;
+            qp.offer(sum);
+            answer++;
+            System.out.println(qp);
+        }
+        return answer;
+    }
+}
