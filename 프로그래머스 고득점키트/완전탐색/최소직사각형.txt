@@ -1,0 +1,21 @@
+class Solution {
+    public int solution(int[][] sizes) {
+        int answer = 0;
+        System.out.println(sizes.length);
+        int maxw = 0;
+        int maxh = 0;
+        for(int i = 0; i<sizes.length; i++){
+            int maxw1 = sizes[i][0];
+            int maxh1 = sizes[i][1];
+            if(maxw1<=maxh1){
+                int temp = maxw1;
+                maxw1 = maxh1;
+                maxh1 = temp;
+            }
+            maxw = Math.max(maxw, maxw1);
+            maxh = Math.max(maxh, maxh1);
+        }
+        answer = maxw * maxh;
+        return answer;
+    }
+}
