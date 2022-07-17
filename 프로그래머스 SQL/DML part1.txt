@@ -1,41 +1,34 @@
-DML((Select)
-* : From 절에 나열된 테이블에서 모든 열을 선택
-ALL: 선택된 모든 행을 반환. ALL이 default(생략가능)
-DISTINCT: 선택된 모든 행 중에서 중복 행 제거
-expression: 표현식은 값으로 인식되는 하나 이상의 값, 연산자 및 SQL 함수의 조합을 뜻함
-alias: 별칭
+use ssafydb;
 
-[기본 Select]
-모든 사원의 모든 정보 검색
+select employee_id, first_name, salary
+from employees;
+
 select *
 from employees;
 
-사원이 근무하는 부서의 부서번호 검색
 select all department_id
 from employees;
+
+select distinct department_id
+from employees
+order by department_id;
 
 select distinct employee_id
 from employees;
 
-모든 사원의 사번, 이름, 급여 검색
 select employee_id, first_name, salary
 from employees;
 
-[Alias, 사칙연산 (+,-,*,/), NULL Value]
-모든 사원의 사번, 이름, 급여, 급여 * 12 (연봉) 검색
-select employee_id as 사번, first_name "이름",
+select employee_id as 사번, first_name as "이름",
         salary as "급여", salary * 12 "연봉"
 from employees;
 
-모든 사원의 사번, 이름, 급여, 급여*12(연봉), 커미션, 커미션포함 연봉 검색
-select emloyee_id 사번, first_name "이름", salary "급여",
+select employee_id 사번, first_name "이름", salary "급여",
         salary * 12 "연봉", commission_pct,
         (salary + salary * commission_pct) * 12 "커미션포함연봉1",
         (salary + salary * IFNULL(commission_pct, 0)) * 12 "커미션포함연봉2"
 from employees;
 
-모든 사원의 사번, 이름, 급영 따른 등급표시 검색
-15000 이상 "고액연봉" 8000이상 "평균연봉" 8000미만 "저액연봉"
 select employee_id, first_name, salary,
         case when salary > 15000 then '고액연봉'
               when salary > 8000 then '평균연봉'
@@ -43,20 +36,21 @@ select employee_id, first_name, salary,
         end "연봉등급"
 from employees;
 
-부서번호가 50인 사원중 급여가 7000 이상인 사원의 사번, 이름, 급여, 부서번호 검색
 select employee_id, first_name, salary, department_id
 from employees
 where department_id = 50
 and salary >= 7000;
 
-근무 부서번호가 50, 60, 70에 근무하는 사원의 사번, 이름, 부서번호 검색
 select employee_id, first_name, salary, department_id
 from employees
 where department_id = 50
 or department_id = 60
 or department_id = 70;
 
-근무 부서번호가 50, 60, 70이 아닌 사원의 사번, 이름, 부서번호 검색
+select employee_id, first_name, salary, department_id
+from employees
+where department_id IN (50,60,70);
+
 select employee_id, first_name, salary, department_id
 from employees
 where department_id != 50
@@ -69,53 +63,109 @@ where not(department_id = 50
 or department_id = 60
 or department_id = 70);
 
-근무 부서번호가 50, 60, 70에 근무하는 사원의 사번, 이름, 부서번호 검색
-select employee_id, first_name, department_id
-from employees
-where department_id in (50,60,70);
-
-근무 부서번호가 50,60,70이 아닌 사원의 사번, 이름, 부서번호 검색
 select employee_id, first_name, department_id
 from employees
 where department_id not in (50,60,70);
 
-급여가 6000 이상 10000이하인 사원의 사번, 이름, 급여 검색
 select employee_id, first_name, salary
 from employees
-where salary >= 6000
+where 6000 <= salary
 and salary <=10000;
 
+-- select employee_id, first_name, salary
+-- from employees
+-- where salary >=6000 between salary <= 10000;
+
 select employee_id, first_name, salary
 from employees
-where salary >=6000 between salary <= 10000;
+where salary between 6000 and 10000;
 
-근무부서가 지정되지 않은(알수없는) 사원의 사번, 이름, 부서번호 검색
 select employee_id, first_name, salary
 from employees
 where department_id is null;
 
-커미션을 받는 사원의 사번, 이름, 급여, 커미션 검색
 select employee_id, first_name, salary, commission_pct
 from employees
 where commission_pct is not null;
 
-이름에 'x'가 들어간 사원의 사번, 이름 검색
 select employee_id, first_name
 from employees
 where first_name like '%x%';
 
-이름의 끝에서 3번째 자리에 'x'가 들어간 사원의 사번, 이름 검색
 select employee_id, first_name
 from employees
 where first_name like '%x__';
 
-[정렬]
 select employee_id, first_name, salary
 from employees
 order by salary desc;
 
-50, 60, 70에 근무하는 사원의 사번, 이름, 부서번호, 급여 검색
-단, 부서별 정렬(오름차순) 후 급여 순(내림차순) 검색
 select employee_id, first_name, department_id, salary
 from employees
 order by department_id, salary desc;
+
+select abs(-5), abs(0), abs(+5)
+from dual;
+
+select ceil(12.2), ceiling(12.2), ceil(-12.2), ceiling(-12.2)
+from dual;
+
+select floor(12.2), floor(-12.2)
+from dual;
+
+select pow(2,3), power(2,3)
+from dual;
+
+select mod(8,3), 8%3
+from dual;
+
+select greatest(4,3,7,5,9), least(4,3,7,5,9)
+from dual;
+
+select ASCII('0'), ASCII('A'), ASCII('a')
+from dual;
+
+select concat(employee_id, '번 사원의 이름', ' ',first_name, ' ', last_name)
+from employees
+where employee_id = 100;
+
+-- select *
+-- from employees
+-- where employee_id = 100;
+
+select insert('helloabc!!!', 6, 3, ' ssafy')
+from dual;
+
+select replace('helloabc!!!', 'abc', ' ssafy')
+from dual;
+
+select instr('hello  ssafy !!!', 'ssafy')
+from dual;
+
+select mid('hello ssafy !!!', 7, 5), substring('hello ssafy !!!', 7, 5)
+from dual;
+
+select reverse('!!! yfass olleh')
+from dual;
+
+select lower('hElLo SsaFy !!!'), lcase('hElLo SsaFy !!!')
+from dual;
+
+select upper('hElLo SsaFy !!!'), ucase('hElLo SsaFy !!!')
+from dual;
+
+select left('hello ssafy !!!', 5), right('hello ssafy !!!', 6)
+from dual;
+
+select now(), sysdate(), current_timestamp()
+from dual;
+
+select curdate(), current_date(), curtime(), current_time()
+from dual;
+
+select 	now(),
+		date_format(now(), '%Y %M %e %p %l %i %S'),
+        date_format(now(), '%y-%m%d %H:%i:%s'),
+        date_format(now(), '%y.%m.%d %w'),
+        date_format(now(), '%H시%i분%s초')
+        from dual;
