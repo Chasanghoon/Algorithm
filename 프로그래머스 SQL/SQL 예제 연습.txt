@@ -1,0 +1,135 @@
+use ssafydb;
+
+select *
+from emp;
+
+select *
+from dept;
+
+-- 1
+select e.ENAME, e.SAL, d.DNAME
+from emp e left join dept d
+on e.DEPTNO = d.DEPTNO;
+
+-- 2
+select e.ENAME, d.dname
+from emp e left join dept d
+on e.DEPTNO = d.DEPTNO
+where e.ENAME = "king";
+
+select * from dept;
+select * from emp;
+
+-- 3
+select deptno, dname from dept;
+select e.ENAME, e.DEPTNO, d.DNAME, e.sal
+from emp e left join dept d
+on e.DEPTNO = d.DEPTNO;
+
+-- 4
+select *
+from emp;
+
+select concat(e.ename,'의 매니저는', m.ename,'이다.') as 'empno와 mgr의 상관관계'
+from emp e join emp m
+on e.mgr = m.empno;
+
+-- 5
+select *
+from emp;
+
+select e.ename, d.dname, e.sal, d.deptno
+from emp e join dept d
+on e.deptno = d.deptno
+where e.job = (select job
+				from emp
+                where ENAME = "SCOTT");
+
+-- 6
+select * from emp;
+
+select EMPNO, ename, hiredate, sal
+from emp
+where deptno in (select d.deptno
+					from emp e join dept d
+                    on e.deptno = d.deptno
+					where ename="SCOTT");
+                    
+
+-- 7
+select * from emp;
+select * from dept;
+
+select e.empno, e.ename, d.dname, e.hiredate, d.LOC, e.sal
+from emp e inner join dept d
+on e.deptno = d.deptno
+where sal > (select avg(sal)
+			from emp);
+            
+select e.empno, e.ename, d.dname, e.hiredate, d.LOC, e.sal
+from emp e inner join dept d
+on e.deptno = d.deptno
+where sal > all (select avg(sal)
+			from emp);
+
+-- 8
+select e.empno, e.ename, d.dname, d.loc, e.sal
+from emp e inner join dept d
+on e.deptno = d.deptno
+where e.job = ANY (select job
+				from emp
+				where deptno=30) 
+order by e.sal desc;
+
+select e.empno, e.ename, d.dname, d.loc, e.sal
+from emp e inner join dept d
+on e.deptno = d.deptno
+where e.job in (select job
+				from emp
+				where deptno=30) 
+order by e.sal desc;
+                 
+-- 9
+select *
+from emp;
+
+select *
+from dept;
+
+select e.empno, e.ename, d.dname, e.hiredate, d.loc
+from emp e join dept d
+on e.DEPTNO = d.DEPTNO
+where job not in (select job
+					from emp
+                    where deptno=30) and e.deptno=10;
+                    
+-- 10
+select *
+from emp;
+
+select empno, ename, sal
+from emp
+where sal IN (select sal
+			from emp
+			where ename = "KING" or ename ="JAMES");
+            
+-- 11
+select empno, ename, sal
+from emp
+where sal > (select max(sal)
+			from emp
+			where DEPTNO = 30);
+
+-- 12
+create index index_ename on emp (ename);
+show index from emp;
+
+-- 13
+select *
+from emp;
+
+select ename, sal
+from emp
+where year(hiredate) in (select year(hiredate)
+				from emp
+				where ename = "ALLEN");
