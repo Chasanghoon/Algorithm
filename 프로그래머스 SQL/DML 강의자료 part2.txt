@@ -1,0 +1,421 @@
+use ssafydb;
+
+select employee_id, first_name, salary
+from employees;
+
+select *
+from employees;
+
+select all department_id
+from employees;
+
+select distinct department_id
+from employees
+order by department_id;
+
+select distinct employee_id
+from employees;
+
+select employee_id, first_name, salary
+from employees;
+
+select employee_id as 사번, first_name as "이름",
+        salary as "급여", salary * 12 "연봉"
+from employees;
+
+select employee_id 사번, first_name "이름", salary "급여",
+        salary * 12 "연봉", commission_pct,
+        (salary + salary * commission_pct) * 12 "커미션포함연봉1",
+        (salary + salary * IFNULL(commission_pct, 0)) * 12 "커미션포함연봉2"
+from employees;
+
+select employee_id, first_name, salary,
+        case when salary > 15000 then '고액연봉'
+              when salary > 8000 then '평균연봉'
+              else '저액연봉'
+        end "연봉등급"
+from employees;
+
+select employee_id, first_name, salary, department_id
+from employees
+where department_id = 50
+and salary >= 7000;
+
+select employee_id, first_name, salary, department_id
+from employees
+where department_id = 50
+or department_id = 60
+or department_id = 70;
+
+select employee_id, first_name, salary, department_id
+from employees
+where department_id IN (50,60,70);
+
+select employee_id, first_name, salary, department_id
+from employees
+where department_id != 50
+and department_id != 60
+and department_id != 70;
+
+select employee_id, first_name, salary, department_id
+from employees
+where not(department_id = 50
+or department_id = 60
+or department_id = 70);
+
+select employee_id, first_name, department_id
+from employees
+where department_id not in (50,60,70);
+
+select employee_id, first_name, salary
+from employees
+where 6000 <= salary
+and salary <=10000;
+
+-- select employee_id, first_name, salary
+-- from employees
+-- where salary >=6000 between salary <= 10000;
+
+select employee_id, first_name, salary
+from employees
+where salary between 6000 and 10000;
+
+select employee_id, first_name, salary
+from employees
+where department_id is null;
+
+select employee_id, first_name, salary, commission_pct
+from employees
+where commission_pct is not null;
+
+select employee_id, first_name
+from employees
+where first_name like '%x%';
+
+select employee_id, first_name
+from employees
+where first_name like '%x__';
+
+select employee_id, first_name, salary
+from employees
+order by salary desc;
+
+select employee_id, first_name, department_id, salary
+from employees
+order by department_id, salary desc;
+
+select abs(-5), abs(0), abs(+5)
+from dual;
+
+select ceil(12.2), ceiling(12.2), ceil(-12.2), ceiling(-12.2)
+from dual;
+
+select floor(12.2), floor(-12.2)
+from dual;
+
+select pow(2,3), power(2,3)
+from dual;
+
+select mod(8,3), 8%3
+from dual;
+
+select greatest(4,3,7,5,9), least(4,3,7,5,9)
+from dual;
+
+select ASCII('0'), ASCII('A'), ASCII('a')
+from dual;
+
+select concat(employee_id, '번 사원의 이름', ' ',first_name, ' ', last_name)
+from employees
+where employee_id = 100;
+
+-- select *
+-- from employees
+-- where employee_id = 100;
+
+select insert('helloabc!!!', 6, 3, ' ssafy')
+from dual;
+
+select replace('helloabc!!!', 'abc', ' ssafy')
+from dual;
+
+select instr('hello  ssafy !!!', 'ssafy')
+from dual;
+
+select mid('hello ssafy !!!', 7, 5), substring('hello ssafy !!!', 7, 5)
+from dual;
+
+select reverse('!!! yfass olleh')
+from dual;
+
+select lower('hElLo SsaFy !!!'), lcase('hElLo SsaFy !!!')
+from dual;
+
+select upper('hElLo SsaFy !!!'), ucase('hElLo SsaFy !!!')
+from dual;
+
+select left('hello ssafy !!!', 5), right('hello ssafy !!!', 6)
+from dual;
+
+select now(), sysdate(), current_timestamp()
+from dual;
+
+select curdate(), current_date(), curtime(), current_time()
+from dual;
+
+select 	now(),
+		date_format(now(), '%Y %M %e %p %l %i %S'),
+        date_format(now(), '%y-%m%d %H:%i:%s'),
+        date_format(now(), '%y.%m.%d %w'),
+        date_format(now(), '%H시%i분%s초')
+        from dual;
+
+select *
+from employees;
+
+select *
+from departments;
+
+select *
+from locations;
+
+select e.employee_id, e.first_name, e.salary, d.department_name
+from employees e left join departments d
+on e.department_id = d.department_id
+where employee_id = 100;
+
+select e.employee_id, e.first_name, e.salary, e.department_id, d.department_name
+from employees e natural join departments d
+where d.department_id=10;
+
+select d.department_id, d.department_name, l.city
+from departments d natural join locations l
+where d.department_id = 10;
+
+-- 문제상황: join 했을때 답을 모름
+select e.employee_id, e.first_name, d.department_name
+from employees e left outer join departments d
+on e.department_id = d.department_id
+order by e.employee_id;
+
+select e.employee_id, e.first_name, m.employee_id, m.first_name
+from employees e join employees m
+on e.manager_id = m.employee_id;
+
+select *
+from employees;
+
+select department_name
+from departments
+where department_id = (
+						select department_id
+                        from employees
+                        where employee_id = 100);
+                        
+select department_id, department_name
+from departments
+where location_id = (
+						select location_id
+                        from locations
+                        where binary upper(city) = upper('seattle'));
+                        
+select department_id, department_name
+from departments
+where location_id = (
+						select location_id
+                        from locations
+                        where CITY = 'SEATTLE');
+                        
+select *
+from departments;
+
+select *
+from locations;
+
+select *
+from departments d natural join locations l;
+
+select *
+from departments;
+
+select e.employee_id, e.first_name, e.salary, d.department_id, d.department_name
+from employees e inner join  departments d
+on e.department_id = d.department_id
+where employee_id = 100;
+
+select *
+from departments;
+
+select *
+from locations;
+
+select d.department_id, d.department_name, l.city
+from departments d natural join locations l
+where d.department_id = 10;
+
+select department_id
+from employees;
+
+select count(distinct department_id)
+from employees;
+
+select d.department_name, e.employee_id, e.first_name
+from employees e right join departments d
+using (department_id);
+
+select *
+from employees;
+
+select e.employee_id, e.first_name, m.employee_id, m.first_name
+from employees e inner join employees m
+on e.manager_id = m.employee_id;
+
+select employee_id, first_name
+from employees;
+
+desc employees;
+
+desc departments;
+
+select e.employee_id, e.first_name, e.salary, e.department_id, d.department_name
+from employees e left outer join departments d
+on e.department_id = d.department_id
+where e.employee_id = 100;
+
+-- seattle에서 근무하는 사원의 사번, 이름, 급여, 부서이름, 도시이름
+select *
+from employees;
+
+select *
+from departments;
+-- seattle에서 근무하는 사원의 사번, 이름, 급여, 부서이름, 도시이름
+select e.employee_id, e.first_name, j.job_title, e.salary, l.city
+from employees e inner join jobs j
+on e.job_id = j.job_id
+inner join departments d
+on e.department_id = d.department_id
+inner join locations l
+on d.location_id = l.location_id
+where upper(l.city) = upper('seattle');
+
+-- 회사에 근무하는 모든 사원의 사번, 이름, 부서 이름
+-- 회사에 근무하는 사원 수
+-- 107명
+
+select count(employee_id)
+from employees;
+
+select e.employee_id, e.first_name, ifnull(d.department_name, "대기발령")
+from employees e left outer join departments d
+on e.department_id = d.department_id;
+
+select count(distinct department_id)
+from departments;
+
+select d.department_name, e.employee_id, e.first_name
+from departments d left join employees e
+on d.department_id = e.department_id;
+
+
+-- self join
+-- 모든 사원의 사번, 이름, 매니저사번, 매니저이름
+select e.employee_id, e.first_name, e.manager_id, m.employee_id, m.first_name
+from employees e join employees m
+on e.manager_id = m.employee_id;
+
+select *
+from employees;
+
+-- none-equi join
+-- 모든 사원의 사번, 이름, 급여, 급여등급
+select e.employee_id, e.first_name, e.salary, s.grade
+from employees e join salgrades s
+on e.salary >= s.losal
+and e.salary <= hisal
+order by s.grade desc;
+
+select e.employee_id, e.first_name, e.salary, s.grade
+from employees e join salgrades s
+on e.salary between s.losal and hisal
+order by s.grade desc;
+
+select e.employee_id, e.first_name, d.department_id, h.job_title, date_format(j.start_date, "%y.%m.%d") 시작일, date_format(j.end_date, '%y.%m.%d') 종료일
+from employees e join job_history j
+on e.employee_id = j.employee_id
+join departments d
+on d.department_id = j.department_id
+join jobs h
+on h.job_id = j.job_id
+where e.employee_id = 101;
+
+-- --------------------------part 3-------------------------------
+-- 사번이 100번인 사원의 부서이름
+select d.department_name
+from employees e join departments d
+on e.department_id = d.department_id
+where e.employee_id = 100;
+
+select department_name
+from departments
+where employee_id = (select employee_id
+					 from employees
+					 where employee_id=100);
+
+select department_id
+from employees
+where employee_id = (select department_id
+					 from departments
+                     where department_id=100);
+
+select department_name
+from departments
+where employee_id = 100;
+
+select department_name
+from departments
+where department_id = (select department_id
+					   from employees
+					   where employee_id = 100);
+
+
+-- 다중행 서브쿼리
+select employee_id, first_name, department_id
+from employees 
+where department_id in (
+						select department_id
+						from departments
+						where location_id = (
+											select location_id
+											from locations
+											where upper(city) = upper('seattle'))
+);
+
+
+-- 
+select employee_id, first_name, salary, department_id
+from employees
+where salary > any (select salary
+				from employees
+				where department_id = 30);
+                
+
+select employee_id, first_name, salary, department_id
+from employees
+where salary > all (select salary
+				from employees
+				where department_id = 30);
+
+-- 다중열
+select employee_id, first_name
+from employees
+where (salary, department_id) in (select salary, department_id
+								  from employees
+								  where commission_pct is not null
+								  and manager_id = 148);
+
+select department_id, sum(salary), avg(salary)
+from employees
+group by department_id;
+
+
+
